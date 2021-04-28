@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>Where's Zombie</title>
+
+<style>
+#zombie_map {
+	height: 100%;
+	width: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	background-color: grey;
+}
+</style>
+
+
+</head>
+
+<body>
+My zombie map
+
+<div id="zombie_map"></div>
+<script>
+	var zombie_map;
+
+	var data = `-33.32695632123638 115.63323497916792 hospital.png	
+-33.327081823696346 115.63358903075789 weapons.png
+-33.327426954529166 115.63300430919264 weapons.png
+-33.327610724934345 115.63275754596327 weapons.png
+-33.328049979454384 115.63207626487349 zombie.png
+-33.327494187649194 115.6322586550865 zombie.png
+-33.32793344275672 115.63309013988112 zombie.png
+-33.327718297674615 115.6328701987419 zombie.png
+-33.327651064727505 115.63343346263502 zombie.png
+-33.32717595042268 115.63350320006941 zombie.png
+-33.32748074102933 115.63319206382368 zombie.png`;
+
+var markers = data.split("\n");
+var all_markers=[];
+var count =0;
+
+	function initMap() {
+
+	zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
+	zoom: 18,
+	center: {lat: -33.327617, lng: 115.633066}
+
+	});
+
+	if (navigator.geolocation) {
+navigator.geolocation.watchPosition(set_my_position);
+}
+else {
+	alert("Geolocation doesn't work in your browser");
+}
+
+function set_my_position(position) {
+
+var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+console.log(pos);
+}
+
+	if (count<1) {
+	for (var i=0; i< markers.length; i++) {
+	var marker_data = markers[i].trim().split(" ");
+	var latitude = marker_data[0];
+	var longitude = marker_data[1];
+	var emoji = marker_data[2];
+
+	var marker_position = new google.maps.LatLng(latitude, longitude);
+	var marker = new google.maps.Marker({
+	position: marker_position,
+	icon: emoji,
+	map:zombie_map
+	});
+
+	all_markers.push(marker);
+
+}	
+count++;
+
+}
+}
+</script>
+
+
+<script async defer
+   src ="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZZWjBCJMghMipsNmyItGh-EnqhgyGquI&callback=initMap">
+ </script>
+
+</body>
+
+</html>
